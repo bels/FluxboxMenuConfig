@@ -5,6 +5,7 @@ public class MenuItem{
 	private String name;
 	private Integer level;
 	private String parent;
+	private String encoding;
 
 	public MenuItem(){
 	
@@ -32,5 +33,13 @@ public class MenuItem{
 
 	public void setLevel(Integer level){
 		this.level = level;
+	}
+
+	public String getEncoding(){
+		return encoding;
+	}
+
+	public void setEncoding(String encoding){
+		this.encoding = encoding;	
 	}
 }
