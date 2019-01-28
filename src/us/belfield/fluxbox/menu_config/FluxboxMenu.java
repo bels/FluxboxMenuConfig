@@ -35,10 +35,19 @@ public class FluxboxMenu{
 		}
 	}
 
-	public HashMap<String,String> getMenu(){
-		HashMap<String, String> organizedMenu = new HashMap<String,String>();
+	public ArrayList<MenuItem> getMenu(){
+		ArrayList<MenuItem> organizedMenu = new ArrayList<MenuItem>();
 		readMenu();
 
+		for(String line : menu){
+			if(line.contains("submenu")){
+				//menu. will need to keep track of these for parent relationships
+			}
+			if(line.contains("exec")){
+				//program
+			}
+			
+		}
 		return organizedMenu;
 	}
 
