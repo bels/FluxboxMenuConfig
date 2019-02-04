@@ -5,6 +5,8 @@ public class MenuItem{
 	private String name;
 	private Integer level;
 	private String parent;
+	private ArrayList<MenuItem> children;
+	private String executable;
 	private String encoding;
 
 	public MenuItem(){
@@ -41,5 +43,29 @@ public class MenuItem{
 
 	public void setEncoding(String encoding){
 		this.encoding = encoding;	
+	}
+
+	public ArrayList<MenuItem> getChildren(){
+		return children;
+	}
+
+	public void addChild(MenuItem child){
+		this.children.add(child);
+	}
+
+	public void setChildren(ArrayList<MenuItem> children){
+		this.children = children;
+	}
+
+	public void deleteChild(MenuItem childToRemove){
+		this.children.remove(childToRemove);
+	}
+
+	public String getExecutable(){
+		return executable;
+	}
+
+	public void setExecutable(String exec){
+		this.executable = exec;
 	}
 }
