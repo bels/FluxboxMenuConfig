@@ -35,10 +35,18 @@ public class MenuConfig extends Application{
     }
 
 	private TreeView constructMenuTree(){
-		HashMap<String,String> menu = fbMenu.getMenu();
-		TreeItem<String> rootItem = new TreeItem<String>(menu.get(0));
+		ArrayList<MenuItem> menu = fbMenu.getMenu();
+		//TreeItem<String> rootItem = new TreeItem<String>(menu.get(0));
+		TreeItem<String> rootItem = new TreeItem<String>("Menu");
+		rootItem.setExpanded(true);
 		TreeView<String> tree = new TreeView<String>(rootItem);
 
+		for(MenuItem m : menu){
+			//first lets figure out what type of entry this is.
+			if(m. .contains("SubMenu")){
+				
+			}
+		}
 		return tree;
 	}
 }
