@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Menu{
 
+	private String name;
 	private String file_location;
 	private String encoding;
 	private ArrayList<String> includes;
@@ -47,5 +48,18 @@ public class Menu{
 
 	public void addChild(SubMenu child) {
 		this.children.add(child);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Name: %s Encoding: %s", this.name,this.encoding);
 	}
 }

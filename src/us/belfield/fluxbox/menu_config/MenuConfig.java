@@ -1,9 +1,12 @@
 package us.belfield.fluxbox.menu_config;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -14,6 +17,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import us.belfield.fluxbox.menu_config.models.*;
@@ -22,7 +26,7 @@ import us.belfield.fluxbox.menu_config.services.FluxboxFile;
 
 public class MenuConfig extends Application{
 
-	private Menu fbMenu = new Menu();
+	private Menu activeMenu = new Menu();
 	private FluxboxMenu menuService = new FluxboxMenu();
 	private FluxboxFile fileService = new FluxboxFile();
 	
@@ -32,6 +36,9 @@ public class MenuConfig extends Application{
 
 	@Override
 	public void start(Stage stage){
+
+		FileChooser fileChooser = new FileChooser();
+
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.TOP_CENTER);
         grid.setHgap(10);
@@ -52,11 +59,26 @@ public class MenuConfig extends Application{
         buttonBox.setAlignment(Pos.CENTER_LEFT);
         Button newMenuButton = new Button("New Menu");
         Button saveMenuButton = new Button("Save Menu");
+        Button loadMenuButton = new Button("Load Menu");
         Button addApplicationButton = new Button("Add Application");
         Button addSubMenuButton = new Button("Add Sub-Menu");
 
+        //button actions
+        loadMenuButton.setOnAction(
+        	new EventHandler<ActionEvent>() {
+        		@Override
+        		public void handle(final ActionEvent e) {
+        			File file = fileChooser.showOpenDialog(stage);
+        			if(file != null) {
+        				ArrayList<String> rawMenu = fileService.readFile(file.getPath());
+        				activeMenu = menuService.newMenu(rawMenu);
+        			}
+        		}
+        	}
+        );
         buttonBox.getChildren().add(newMenuButton);
         buttonBox.getChildren().add(saveMenuButton);
+        buttonBox.getChildren().add(loadMenuButton);
         buttonBox.getChildren().add(addApplicationButton);
         buttonBox.getChildren().add(addSubMenuButton);
 
@@ -76,13 +98,13 @@ public class MenuConfig extends Application{
     }
 
 	private TreeView constructMenuTree(){
-		this.fbMenu = menuService.getMenu();
+
 		//TreeItem<String> rootItem = new TreeItem<String>(menu.get(0));
 		TreeItem<String> rootItem = new TreeItem<String>("Menu");
 		rootItem.setExpanded(true);
 		TreeView<String> tree = new TreeView<String>(rootItem);
 
-		for(SubMenu m : this.fbMenu.getChildren()){
+		for(SubMenu m : activeMenu.getChildren()){
 			
 		}
 		return tree;

@@ -8,6 +8,7 @@ public class SubMenu{
 	private Boolean root_menu;
 	private SubMenu parent;
 	private ArrayList<SubMenu> children;
+	private ArrayList<ExecItem> programs;
 
 	public String getName() {
 		return name;
@@ -43,5 +44,17 @@ public class SubMenu{
 
 	public void addChildren(SubMenu child) {
 		this.children.add(child);
+	}
+
+	public ArrayList<ExecItem> getPrograms() {
+		return programs;
+	}
+
+	public void setPrograms(ArrayList<ExecItem> programs) {
+		this.programs = programs;
+	}
+
+	public void addProgram(ExecItem program) {
+		this.programs.add(program);
 	}
 }
