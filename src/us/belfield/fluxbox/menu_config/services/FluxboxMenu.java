@@ -5,6 +5,7 @@ import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import us.belfield.fluxbox.menu_config.models.ExecItem;
 import us.belfield.fluxbox.menu_config.models.Menu;
 import us.belfield.fluxbox.menu_config.models.SubMenu;
 
@@ -12,7 +13,8 @@ public class FluxboxMenu{
 
 	private Pattern menuPattern = Pattern.compile("\\[begin\\]\\s*\\((.+)\\).*",Pattern.DOTALL);
 	private Pattern submenuPattern = Pattern.compile("\\[submenu\\]\\s*\\((.+)\\).*",Pattern.DOTALL);
-	private Pattern execPattern = Pattern.compile("\\[exec\\].*",Pattern.DOTALL);
+	private Pattern execPattern = Pattern.compile("\\[exec\\]\\s*\\((.+)\\).*",Pattern.DOTALL);
+	private Pattern executablePattern = Pattern.compile("\\{(.+)\\}.*",Pattern.DOTALL);
 	private Pattern encodingPattern = Pattern.compile("\\[encoding\\]\\s*\\{(.+)\\}.*",Pattern.DOTALL);
 	private Pattern endPattern = Pattern.compile("\\[end\\].*",Pattern.DOTALL);
 	private ArrayList<String> rawMenu;
@@ -71,6 +73,7 @@ public class FluxboxMenu{
 		submenu.setName(name);
 
 		this._buildSubMenu(submenu,startIndex);
+		parentMenu.addChild(submenu);
 	}
 
 	public void buildSubMenu(SubMenu parentMenu, String name, int startIndex ) {
@@ -79,14 +82,7 @@ public class FluxboxMenu{
 		submenu.setName(name);
 
 		this._buildSubMenu(submenu,startIndex);
-	}
-
-	public void addExecutable(SubMenu submenu, String rawExecutable) {
-		
-	}
-
-	public void addExecutable(Menu menu, String rawExecutable) {
-		
+		parentMenu.addChildren(submenu);
 	}
 
 	public void addSeparator() {
@@ -98,10 +94,23 @@ public class FluxboxMenu{
 		for (int i = startIndex; i < rawMenu.size(); i++) {
 			String line = rawMenu.get(i);
 			Matcher subMenuMatcher = submenuPattern.matcher(line);
+			Matcher endMenuMatcher = endPattern.matcher(line);
+			Matcher execMatcher = execPattern.matcher(line);
+			Matcher executableMatcher = executablePattern.matcher(line);
 
 			if(subMenuMatcher.find()) {
 				String submenuName = subMenuMatcher.group(1);
 				this.buildSubMenu(submenu, submenuName, i);
+			}
+			if(endMenuMatcher.find()) {
+				return;
+			}
+			if(execMatcher.find()) {
+				String executable = executableMatcher.group(1);
+				String name = execMatcher.group(1);
+				ExecItem execItem = new ExecItem();
+				execItem.setExecutable(executable); //maybe break out the path and executable later
+				execItem.setName(name);
 			}
 		}
 
