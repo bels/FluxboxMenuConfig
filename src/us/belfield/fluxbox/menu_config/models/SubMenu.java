@@ -7,8 +7,8 @@ public class SubMenu{
 	private String name;
 	private Boolean root_menu;
 	private SubMenu parent;
-	private ArrayList<SubMenu> children;
-	private ArrayList<ExecItem> programs;
+	private ArrayList<SubMenu> children = new ArrayList<SubMenu>;
+	private ArrayList<ExecItem> programs = new ArrayList<ExecItem>;
 
 	public String getName() {
 		return name;

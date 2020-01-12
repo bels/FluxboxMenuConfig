@@ -72,6 +72,11 @@ public class MenuConfig extends Application{
         			if(file != null) {
         				ArrayList<String> rawMenu = fileService.readFile(file.getPath());
         				activeMenu = menuService.newMenu(rawMenu);
+        				for(SubMenu submenu : activeMenu.getChildren()) {
+        					for(ExecItem execItem : submenu.getPrograms()) {
+        						System.out.println(execItem.getName());
+        					}
+        				}
         			}
         		}
         	}
