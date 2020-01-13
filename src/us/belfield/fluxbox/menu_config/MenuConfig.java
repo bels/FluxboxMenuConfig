@@ -27,6 +27,7 @@ import us.belfield.fluxbox.menu_config.services.FluxboxFile;
 public class MenuConfig extends Application{
 
 	private Menu activeMenu = new Menu();
+	TreeView<String> menuTree = new TreeView<String>();
 	private FluxboxMenu menuService = new FluxboxMenu();
 	private FluxboxFile fileService = new FluxboxFile();
 	
@@ -72,11 +73,12 @@ public class MenuConfig extends Application{
         			if(file != null) {
         				ArrayList<String> rawMenu = fileService.readFile(file.getPath());
         				activeMenu = menuService.newMenu(rawMenu);
-        				for(SubMenu submenu : activeMenu.getChildren()) {
-        					for(ExecItem execItem : submenu.getPrograms()) {
-        						System.out.println(execItem.getName());
-        					}
-        				}
+        				
+        				TreeItem<String> rootItem = new TreeItem<String>("Menu");
+        				rootItem.setExpanded(true);
+
+        				_constructMenuTree(rootItem);
+        				menuTree.setRoot(rootItem);
         			}
         		}
         	}
@@ -91,6 +93,7 @@ public class MenuConfig extends Application{
         menuTreeBox.setAlignment(Pos.TOP_CENTER);
         Text menuTreeTitle = new Text("Menu");
         menuTreeBox.getChildren().add(menuTreeTitle);
+        menuTreeBox.getChildren().add(menuTree);
 
         grid.add(buttonBox, 0, 1);
         grid.add(menuTreeBox, 1, 1);
@@ -102,16 +105,28 @@ public class MenuConfig extends Application{
         Application.launch(args);
     }
 
-	private TreeView constructMenuTree(){
-
-		//TreeItem<String> rootItem = new TreeItem<String>(menu.get(0));
-		TreeItem<String> rootItem = new TreeItem<String>("Menu");
-		rootItem.setExpanded(true);
-		TreeView<String> tree = new TreeView<String>(rootItem);
-
+	private void _constructMenuTree(TreeItem<String> rootItem){
 		for(SubMenu m : activeMenu.getChildren()){
-			
+			this._buildTree(rootItem, m);
 		}
-		return tree;
+		for(ExecItem e : activeMenu.getPrograms()) {
+			//System.out.println(e.getName());
+			rootItem.getChildren().add(new TreeItem<String>(e.getName()));
+		}
+	}
+
+	private void _buildTree(TreeItem<String> parent, SubMenu menu) {
+		
+		for(SubMenu m : menu.getChildren()) {
+			TreeItem<String> branch = new TreeItem<String>(m.getName());
+			parent.getChildren().add(branch);
+			this._buildTree(branch, m);
+		}
+
+		for(ExecItem e : menu.getPrograms()) {
+			parent.getChildren().add(new TreeItem<String>(e.getName()));
+		}
+		
+		return;
 	}
 }

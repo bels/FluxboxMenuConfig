@@ -51,6 +51,7 @@ public class FluxboxMenu{
 			if(subMenuMatcher.find()) { 
 				String name = subMenuMatcher.group(1);
 				this.buildSubMenu(menu, name, i + 1); 
+				System.out.println(name);
 			}
 			
 			if(execMatcher.find()) {
@@ -98,7 +99,6 @@ public class FluxboxMenu{
 		
 		for (int i = startIndex; i < rawMenu.size(); i++) {
 			String line = rawMenu.get(i);
-			System.out.println(line);
 			Matcher subMenuMatcher = submenuPattern.matcher(line);
 			Matcher endMenuMatcher = endPattern.matcher(line);
 			Matcher execMatcher = execPattern.matcher(line);
@@ -117,7 +117,6 @@ public class FluxboxMenu{
 				execItem.setExecutable(executable); //maybe break out the path and executable later
 				execItem.setName(name);
 				submenu.addProgram(execItem);
-				System.out.println(execItem);
 			}
 		}
 
